@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм»
 
 * Студент: [Иван Беликов](https://up.htmlacademy.ru/javascript/28/user/2089717).
-* Наставник: `Неизвестно`.
+* Наставник: [Никита Канаев](https://htmlacademy.ru/profile/lui).
 
 ---
 
