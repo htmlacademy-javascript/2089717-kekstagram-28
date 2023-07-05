@@ -1,1 +1,1 @@
-Math.random();
+import { collectionUniquePhotos } from './miniature.js';

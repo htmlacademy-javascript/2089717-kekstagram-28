@@ -35,3 +35,4 @@ function showSupplementedString(string, minLength, segment) {
   return wholeString;
 }
 
+  
