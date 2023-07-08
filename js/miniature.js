@@ -1,11 +1,14 @@
 import { arrayUniqueDescriptions } from './setup.js';
 
+
 const pictureTemplate = document
   .querySelector('#picture')
   .content.querySelector('.picture');
 
 const picturesListFragment = document.createDocumentFragment();
 const picturesList = document.querySelector('.pictures');
+const userModalElement = document.querySelector('.big-picture');
+const smallPictures = document.querySelectorAll('.picture');
 
 const collectionUniquePhotos = arrayUniqueDescriptions.forEach(
   ({ url, commentsQuantity, likes, description, id}) => {
