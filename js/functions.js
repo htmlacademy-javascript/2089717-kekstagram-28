@@ -1,10 +1,9 @@
-function checkPalindrome(word) {
-  return (word.split('').reverse().join(''));
-}
+// function checkPalindrome(word) {
+//   return (word.split('').reverse().join(''));
+// }
 
-console.log(checkPalindrome('Анна'));
-// // Функция 1
-
+// console.log(checkPalindrome('Анна'));
+// // // Функция 1
 
 
 // function checkStringLength(string, amount) {
@@ -14,7 +13,7 @@ console.log(checkPalindrome('Анна'));
 //     return false;
 //   }
 // }
-// === word.slice(word.length / 2, word.length)
+// console.log(checkStringLength('строка', 6))
 // //Функция 2
 
 // function checkPalindrome(string) {
@@ -42,4 +41,33 @@ console.log(checkPalindrome('Анна'));
 //   }
 //   return wholeString;
 // }
+
+//Функция 2
+
+function showNumber(string) {
+  if(Number(string)) {
+    string = String(string);
+  }
+  const newString = string.split('');
+  const numberString = [];
+  for(let i = 0; i < newString.length; i++) {
+    if(newString[i] >= 1 && newString[i] <= 9) {
+      numberString.push(newString[i]);
+    }
+  }
+  if (numberString.length === 0) {
+    return NaN;
+  } else {
+    return Number(numberString.join(''));
+  }
+}
+console.log(showNumber();
+
+//Функция 3
+
+// function showWholeString(string, minLength, segment) {
+//   while()
+//   return wholeString;
+//  }
+
 
