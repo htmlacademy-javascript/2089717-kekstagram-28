@@ -13,23 +13,6 @@ const commentsLoader = document.querySelector('.comments-loader');
 
 // Кол-бэк функция для обработчика ESC (также предотвращает экспонинциальный рост комментов при закрытии)
 
-const closePopupWithEsc = (evt) => {
-  if(evt.key === 'Escape') {
-    evt.preventDefault();
-    closePopup();
-    socialComments.replaceChildren();
-  }
-};
-
-function closePopup(){
-  userModalElement.classList.add('hidden');
-  socialComments.replaceChildren();
-  document.removeEventListener('keydown', closePopupWithEsc);
-  body.classList.remove('.modal-open');
-  socialComment.classList.remove('hidden');
-}
-
-
 const getNewComment = (commentSample, currentCommentData) => {
   const currentComment = commentSample.cloneNode(true);
   const currentCommentPicture = currentComment.querySelector('img');
@@ -39,6 +22,7 @@ const getNewComment = (commentSample, currentCommentData) => {
   currentCommentText.textContent = currentCommentData.message;
   return currentComment;
 };
+
 
 const openPopup = (dataObject) => {
   const {url:pictureImg, likes:pictureLikeCount, commentsQuantity:pictureCommentCount, description:description, comments: comments} = dataObject;
@@ -61,7 +45,22 @@ const openPopup = (dataObject) => {
   socialCaption.textContent = description;
   socialComments.replaceChildren();
 
+  const closePopupWithEsc = (evt) => {
+    if(evt.key === 'Escape') {
+      evt.preventDefault();
+      closePopup();
 
+    }
+  };
+
+  function closePopup(){
+    userModalElement.classList.add('hidden');
+    socialComments.replaceChildren();
+    document.removeEventListener('keydown', closePopupWithEsc);
+    body.classList.remove('.modal-open');
+    socialComment.classList.remove('hidden');
+    commentsLoader.removeEventListener('click', getNewFiveComments);
+  }
   //Отрисовка 5-ти комментов
 
 
@@ -71,18 +70,19 @@ const openPopup = (dataObject) => {
   }
 
   //Обработчик отрисовкки последующих 5-ти элементов при   клике "Загрузить ещё"
-  if(socialComments.children.length > 4){
-    commentsLoader.addEventListener('click', () => {
-      console.log('Количество отрендеренных комментов - ',socialComments.children.length);
-      // socialComments.children.length
-      const currentCommentsArray = comments.slice(socialComments.children.length, socialComments.children.length + 5);
-      for(let i = 0; i < currentCommentsArray.length; i++) {
-        const newComment = getNewComment(socialComment, currentCommentsArray[i]);
-        console.log(newComment);
-        socialComments.appendChild(newComment);
-      }
-    });
+
+  function getNewFiveComments() {
+    console.log('Количество отрендеренных комментов - ',socialComments.children.length);
+    // socialComments.children.length
+    const currentCommentsArray = comments.slice(socialComments.children.length, socialComments.children.length + 5);
+    for(let i = 0; i < currentCommentsArray.length; i++) {
+      const newComment = getNewComment(socialComment, currentCommentsArray[i]);
+      console.log(newComment);
+      socialComments.appendChild(newComment);
+    }
   }
+
+  commentsLoader.addEventListener('click', getNewFiveComments);
 
   body.classList.add('.modal-open');
 
@@ -90,6 +90,12 @@ const openPopup = (dataObject) => {
 
   document.addEventListener('keydown', closePopupWithEsc);
 
+  const closePopupByButton = () => {
+    closePopup();
+  };
+
+  bigPictureCancel.addEventListener('click', closePopupByButton);
+  return getNewFiveComments;
 };
 
 const addThumbnailClickHandler = (smallPicture, dataObject) => {
@@ -97,15 +103,6 @@ const addThumbnailClickHandler = (smallPicture, dataObject) => {
 };
 //Обработчик закрытия окна по кнопке крестика (также предотвращает экспонинциальный рост комментов при закрытии)
 
-const closePopupByButton = () => {
-  userModalElement.classList.add('hidden');
-  socialComments.replaceChildren();
-  // socialComments.appendChild(socialComment);
-  document.removeEventListener('keydown', closePopupWithEsc);
-
-};
-
-bigPictureCancel.addEventListener('click', closePopupByButton);
 
 // Навешивание обработчиков на маленькие фото
 
@@ -113,6 +110,6 @@ for(let i = 0; i < smallPictures.length; i++) {
   addThumbnailClickHandler(smallPictures[i], arrayUniqueDescriptions[i]);
 }
 
-export {addThumbnailClickHandler, closePopupWithEsc};
+export {addThumbnailClickHandler};
 
 
