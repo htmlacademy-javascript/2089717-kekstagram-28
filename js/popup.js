@@ -1,5 +1,5 @@
 // import { create } from 'browser-sync';
-import { arrayUniqueDescriptions } from './setup.js';
+// import { arrayUniqueDescriptions } from './setup.js';
 
 const userModalElement = document.querySelector('.big-picture');
 const smallPictures = document.querySelectorAll('.picture');
@@ -25,8 +25,9 @@ const getNewComment = (commentSample, currentCommentData) => {
 
 
 const openPopup = (dataObject) => {
-  const {url:pictureImg, likes:pictureLikeCount, commentsQuantity:pictureCommentCount, description:description, comments: comments} = dataObject;
+  const {url:pictureImg, likes:pictureLikeCount, description:description, comments: comments} = dataObject;
 
+  // commentsQuantity:pictureCommentCount,
   //Отрисовка данных о маленькой картинке в модальное окно
 
   console.log(comments);
@@ -39,8 +40,8 @@ const openPopup = (dataObject) => {
   bigPictureImg.src = pictureImg;
   const likesCount = document.querySelector('.likes-count');
   likesCount.textContent = pictureLikeCount;
-  const commentsCount = document.querySelector('.comments-count');
-  commentsCount.textContent = pictureCommentCount;
+  // const commentsCount = document.querySelector('.comments-count');
+  // commentsCount.textContent = pictureCommentCount;
   const socialCaption = document.querySelector('.social__caption');
   socialCaption.textContent = description;
   socialComments.replaceChildren();
@@ -106,10 +107,7 @@ const addThumbnailClickHandler = (smallPicture, dataObject) => {
 
 // Навешивание обработчиков на маленькие фото
 
-for(let i = 0; i < smallPictures.length; i++) {
-  addThumbnailClickHandler(smallPictures[i], arrayUniqueDescriptions[i]);
-}
 
-export {addThumbnailClickHandler};
+export {addThumbnailClickHandler, smallPictures};
 
 
