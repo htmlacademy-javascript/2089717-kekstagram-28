@@ -1,0 +1,31 @@
+const body = document.querySelector('body');
+const imgUploadOverlay = document.querySelector('.img-upload__overlay');
+const imgUploadInput = document.querySelector('.img-upload__input');
+const closeModalButton = document.querySelector('.img-upload__cancel');
+const hashtagsField = imgUploadOverlay.querySelector('.text__hashtags');
+const descriptionField = imgUploadOverlay.querySelector('.text__description');
+
+const showModal = () => {
+  imgUploadOverlay.classList.remove('hidden');
+  body.classList.add('.modal-open');
+  document.addEventListener('keydown', onDocumentKeydown);
+};
+
+const hideModal = () => {
+  imgUploadOverlay.classList.add('hidden');
+  body.classList.remove('.modal-open');
+  imgUploadInput.value = '';
+  document.removeEventListener('keydown', onDocumentKeydown);
+};
+
+const isOnFocus = () => document.activeElement === hashtagsField || document.activeElement === descriptionField;
+
+function onDocumentKeydown(evt) {
+  if(evt.key === 'Escape' && !isOnFocus()){
+    evt.preventDefault();
+    hideModal();
+  }
+}
+
+export{hideModal, showModal, imgUploadInput, closeModalButton, hashtagsField,
+  descriptionField, imgUploadOverlay, onDocumentKeydown};

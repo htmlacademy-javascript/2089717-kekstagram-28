@@ -1,38 +1,6 @@
-//функция открытия шаблона для изменения картинки при её добавлени на страницу
-const body = document.querySelector('body');
-const imgUploadOverlay = document.querySelector('.img-upload__overlay');
-const imgUploadInput = document.querySelector('.img-upload__input');
-const closeModalButton = document.querySelector('.img-upload__cancel');
-const hashtagsField = imgUploadOverlay.querySelector('.text__hashtags');
-const descriptionField = imgUploadOverlay.querySelector('.text__description');
+import{hashtagsField,
+  descriptionField, imgUploadOverlay, onDocumentKeydown} from './upload_modal.js';
 const uploadform = document.querySelector('.img-upload__form');
-
-// Показ Модального окна
-
-const showModal = () => {
-  imgUploadOverlay.classList.remove('hidden');
-  body.classList.add('.modal-open');
-  document.addEventListener('keydown', onDocumentKeydown);
-};
-
-const hideModal = () => {
-  imgUploadOverlay.classList.add('hidden');
-  body.classList.remove('.modal-open');
-  imgUploadInput.value = '';
-  document.removeEventListener('keydown', onDocumentKeydown);
-};
-
-const isOnFocus = () => document.activeElement === hashtagsField || document.activeElement === descriptionField;
-
-function onDocumentKeydown(evt) {
-  if(evt.key === 'Escape' && !isOnFocus()){
-    evt.preventDefault();
-    hideModal();
-  }
-}
-
-imgUploadInput.addEventListener('change', showModal);
-closeModalButton.addEventListener('click', hideModal);
 
 //Валидация формы
 
@@ -85,18 +53,6 @@ pristine.addValidator(
 );
 
 
-const formValidation = (evt) => {
-  evt.preventDefault();
-  const isValid = pristine.validate();
-  if(isValid) {
-    console.log('Можно отправлять');
-  } else {
-    console.log('Форма невалидна');
-  }
-};
-
-uploadform.addEventListener('submit', formValidation);
-
 //Наложение эффектов
 
 const scaleControlSmaller = document.querySelector('.scale__control--smaller');
@@ -108,6 +64,8 @@ const effectLevelSlider = document.querySelector('.effect-level__slider');
 const effectLevelValue = document.querySelector('.effect-level__value');
 const effectsContainer = document.querySelector('.effects');
 const sliderContainer = document.querySelector('.img-upload__effect-level');
+const effectsLabel = document.querySelector('.effects__label');
+
 
 const EFFECTS = [
   {
@@ -174,16 +132,17 @@ let scaleControlValueNumber = Number(scaleControlValue.value.split('').slice(0,l
 
 uploadImage.style.transform = 'scale(1)';
 
-scaleControlSmaller.addEventListener('click', () => {
+
+const makeScaleControlSmaller = () => {
   if(scaleControlValue.value !== '0%') {
     scaleControlValueNumber = scaleControlValueNumber - 25;
     scaleControlValue.value = `${scaleControlValueNumber}%`;
     uploadImage.style.transform = `scale(0.${scaleControlValueNumber})`;
 
   }
-});
+};
 
-scaleControlBigger.addEventListener('click', () => {
+const makeScaleControlBigger = () => {
   if(scaleControlValue.value !== '100%') {
     scaleControlValueNumber = scaleControlValueNumber + 25;
     scaleControlValue.value = `${scaleControlValueNumber}%`;
@@ -192,7 +151,10 @@ scaleControlBigger.addEventListener('click', () => {
       uploadImage.style.transform = 'scale(1)';
     }
   }
-});
+};
+
+scaleControlSmaller.addEventListener('click', makeScaleControlSmaller);
+scaleControlBigger.addEventListener('click', makeScaleControlBigger);
 
 const isDefault = () => chosenEffect === DERAULT_EFFECT;
 
@@ -205,7 +167,7 @@ const showDlider = () => {
 };
 
 
-const updateSlider = () => {
+function updateSlider() {
   effectLevelSlider.noUiSlider.updateOptions({
     range: {
       min:chosenEffect.min,
@@ -220,7 +182,7 @@ const updateSlider = () => {
   } else {
     showDlider();
   }
-};
+}
 effectLevelValue.value = 0;
 
 const onEffectsChange = (evt) => {
@@ -249,8 +211,115 @@ if(isDefault()){
 } else {
   showDlider();
 }
-// effectLevelSlider.noUiSlider.on('update', onSliderUpdate);
-// effectsContainer.addEventListener('change', onEffectsChange);
 
-export{onSliderUpdate, onEffectsChange, getTagsArray, hashtagsField, effectLevelSlider, effectsContainer,
-   uploadform, formValidation, pristine };
+
+const makeScaleControlStandart = () => {
+  if(scaleControlValue.value !== '100%') {
+    scaleControlValueNumber = 100;
+    scaleControlValue.value = `${scaleControlValueNumber}%`;
+    uploadImage.style.transform = 'scale(1)';
+  }
+};
+
+const makeNoneStyle = () => {
+  chosenEffect = DERAULT_EFFECT;
+  uploadImage.classList.add(`effects__preview--${chosenEffect.value}`);
+  effectsLabel.focus();
+};
+
+function updateModal(){
+  makeNoneStyle();
+  updateSlider();
+  hashtagsField.value = '';
+  descriptionField.value = '';
+  makeScaleControlStandart();
+}
+
+
+const successUpload = document
+  .querySelector('#success')
+  .content.querySelector('.success');
+const successButton = successUpload.querySelector('.success__button');
+const successInner = successUpload.querySelector('.success__inner');
+
+const errorUpload = document
+  .querySelector('#error')
+  .content.querySelector('.error');
+const errorButton = errorUpload.querySelector('.error__button');
+const errorInner = errorUpload.querySelector('.error__inner');
+
+successButton.addEventListener('click', () => {
+  successUpload.remove();
+});
+
+const closeSuccessPopupWithEsc = (evt) => {
+  if(evt.key === 'Escape') {
+    evt.preventDefault();
+    successUpload.remove();
+    document.removeEventListener('keydown', onDocumentKeydown);
+  }
+};
+
+document.addEventListener('click', (evt) => {
+  if(!evt.composedPath().includes(successInner)) {
+    successUpload.remove();
+  }
+});
+
+errorButton.addEventListener('click', () => {
+  errorUpload.remove();
+});
+
+document.addEventListener('click', (evt) => {
+  if(!evt.composedPath().includes(errorInner)) {
+    errorUpload.remove();
+  }
+});
+
+const delayClose = (outContainer)=>{
+  setTimeout(() => {
+    outContainer.remove();
+  }, 5000);
+};
+
+const showAndCloseWithSetTimeoutErrorPopup = () => {
+  imgUploadOverlay.appendChild(errorUpload);
+  delayClose(errorUpload);
+};
+
+const formValidation = (evt) => {
+  evt.preventDefault();
+  const isValid = pristine.validate();
+
+  if(isValid) {
+    const uploadFormData = new FormData(evt.target);
+    fetch('https://28.javascript.pages.academy/kekstagram',
+      {
+        method: 'POST',
+        body: uploadFormData,
+      })
+      .then((response) => {
+        if(response.ok) {
+          updateModal();
+          imgUploadOverlay.appendChild(successUpload);
+          imgUploadOverlay.addEventListener('keydown', closeSuccessPopupWithEsc);
+          delayClose(successUpload);
+          // console.log(imgUploadOverlay.children.length);
+          // if(includes(successUpload)) {
+          //   console.log('areg');
+          // }
+        } else{
+          showAndCloseWithSetTimeoutErrorPopup();
+        }
+      })
+      .catch(()=> {
+        showAndCloseWithSetTimeoutErrorPopup();
+      });
+  } else{
+    showAndCloseWithSetTimeoutErrorPopup();
+  }
+};
+
+uploadform.addEventListener('submit', formValidation);
+export {onSliderUpdate, onEffectsChange, effectLevelSlider, effectsContainer, formValidation};
+

@@ -1,14 +1,11 @@
-// import { create } from 'browser-sync';
-// import { arrayUniqueDescriptions } from './setup.js';
 
 const userModalElement = document.querySelector('.big-picture');
-const smallPictures = document.querySelectorAll('.picture');
+
 const bigPictureCancel = document.querySelector('.big-picture__cancel');
 const socialComments = document.querySelector('.social__comments');
 const socialComment = socialComments.querySelector('.social__comment');
-const bigPictureSocial = document.querySelector('.big-picture__social');
 const body = document.querySelector('body');
-const socialCommentCount = document.querySelector('.social__comment-count ');
+const socialCommentCount = document.querySelector('.current-comments-count');
 const commentsLoader = document.querySelector('.comments-loader');
 
 // Кол-бэк функция для обработчика ESC (также предотвращает экспонинциальный рост комментов при закрытии)
@@ -30,9 +27,6 @@ const openPopup = (dataObject) => {
   // commentsQuantity:pictureCommentCount,
   //Отрисовка данных о маленькой картинке в модальное окно
 
-  console.log(comments);
-  console.log(comments.slice(0,5));
-  console.log(comments.slice(5,10));
 
   userModalElement.classList.remove('hidden');
   const bigPictureWrapper = document.querySelector('.big-picture__img');
@@ -40,11 +34,12 @@ const openPopup = (dataObject) => {
   bigPictureImg.src = pictureImg;
   const likesCount = document.querySelector('.likes-count');
   likesCount.textContent = pictureLikeCount;
-  // const commentsCount = document.querySelector('.comments-count');
-  // commentsCount.textContent = pictureCommentCount;
+  const commentsCount = document.querySelector('.comments-count');
+  commentsCount.textContent = comments.length;
   const socialCaption = document.querySelector('.social__caption');
   socialCaption.textContent = description;
   socialComments.replaceChildren();
+
 
   const closePopupWithEsc = (evt) => {
     if(evt.key === 'Escape') {
@@ -69,17 +64,17 @@ const openPopup = (dataObject) => {
     const newComment = getNewComment(socialComment, comments[i]);
     socialComments.appendChild(newComment);
   }
-
+  socialCommentCount.textContent = socialComments.children.length;
   //Обработчик отрисовкки последующих 5-ти элементов при   клике "Загрузить ещё"
 
+
   function getNewFiveComments() {
-    console.log('Количество отрендеренных комментов - ',socialComments.children.length);
     // socialComments.children.length
     const currentCommentsArray = comments.slice(socialComments.children.length, socialComments.children.length + 5);
     for(let i = 0; i < currentCommentsArray.length; i++) {
       const newComment = getNewComment(socialComment, currentCommentsArray[i]);
-      console.log(newComment);
       socialComments.appendChild(newComment);
+      socialCommentCount.textContent = socialComments.children.length;
     }
   }
 
@@ -108,6 +103,6 @@ const addThumbnailClickHandler = (smallPicture, dataObject) => {
 // Навешивание обработчиков на маленькие фото
 
 
-export {addThumbnailClickHandler, smallPictures};
+export {addThumbnailClickHandler, body};
 
 
