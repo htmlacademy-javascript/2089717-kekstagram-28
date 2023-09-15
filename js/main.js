@@ -1,10 +1,9 @@
 import {getData} from './fetch.js';
-import {hideModal, showModal, imgUploadInput, closeModalButton} from './upload_modal.js';
-import {onSliderUpdate, onEffectsChange, effectLevelSlider, effectsContainer} from './form_validation.js';
+import {uploadform, formValidation} from './form_validation.js';
+import {onSliderUpdate, onEffectsChange, effectLevelSlider, effectsContainer} from './effects_filters.js';
 
 getData();
-imgUploadInput.addEventListener('change', showModal);
-closeModalButton.addEventListener('click', hideModal);
 
+uploadform.addEventListener('submit', formValidation);
 effectLevelSlider.noUiSlider.on('update', onSliderUpdate);
 effectsContainer.addEventListener('change', onEffectsChange);

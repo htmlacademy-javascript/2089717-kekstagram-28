@@ -1,8 +1,10 @@
+import{updateModal} from './effects_filters.js';
+import{hashtagsField} from './data.js';
+
 const body = document.querySelector('body');
 const imgUploadOverlay = document.querySelector('.img-upload__overlay');
 const imgUploadInput = document.querySelector('.img-upload__input');
 const closeModalButton = document.querySelector('.img-upload__cancel');
-const hashtagsField = imgUploadOverlay.querySelector('.text__hashtags');
 const descriptionField = imgUploadOverlay.querySelector('.text__description');
 
 const showModal = () => {
@@ -16,6 +18,7 @@ const hideModal = () => {
   body.classList.remove('.modal-open');
   imgUploadInput.value = '';
   document.removeEventListener('keydown', onDocumentKeydown);
+  updateModal();
 };
 
 const isOnFocus = () => document.activeElement === hashtagsField || document.activeElement === descriptionField;
@@ -27,5 +30,8 @@ function onDocumentKeydown(evt) {
   }
 }
 
-export{hideModal, showModal, imgUploadInput, closeModalButton, hashtagsField,
-  descriptionField, imgUploadOverlay, onDocumentKeydown};
+imgUploadInput.addEventListener('change', showModal);
+closeModalButton.addEventListener('click', hideModal);
+
+export {descriptionField, imgUploadOverlay, onDocumentKeydown};
+

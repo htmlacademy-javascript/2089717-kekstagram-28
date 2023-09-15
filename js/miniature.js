@@ -1,6 +1,4 @@
 // import { arrayUniqueDescriptions } from './setup.js';
-
-
 const pictureTemplate = document
   .querySelector('#picture')
   .content.querySelector('.picture');
@@ -25,9 +23,8 @@ const renderCollectionUniquePhotos = (pictures) => {
       pictureItem.dataset.miniatureId = id;
     }
   );
-
   picturesList.appendChild(picturesListFragment);
 };
 
 
-export { renderCollectionUniquePhotos };
+export { renderCollectionUniquePhotos, picturesList};
