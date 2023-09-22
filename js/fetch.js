@@ -1,8 +1,8 @@
 import { renderCollectionUniquePhotos } from './miniature.js';
-import {debounce, showAlert} from './util.js';
+import {showAlert} from './util.js';
 import {imgUploadOverlay,onDocumentKeydown} from './upload_modal.js';
 import {updateModal} from './effects_filters.js';
-import {getDefaultPicters,getDiscussedPictures,addPictureClickHandler,getPopularPictures,getMixedArray, filterRandomButton,clearPictures} from './filter.js';
+import {getDefaultPicters,getDiscussedPictures,addPictureClickHandler,getPopularPictures,getRandomPictures} from './filter.js';
 
 const getData = () => {
   fetch('https://28.javascript.pages.academy/kekstagram/data')
@@ -16,16 +16,7 @@ const getData = () => {
     .then((pictures) => {
       renderCollectionUniquePhotos(pictures);
       addPictureClickHandler(pictures);
-      const getRandomPictures = (data) => {
-        filterRandomButton.addEventListener('click', () => {
-          clearPictures();
-          const randomPicrures = getMixedArray(data).slice(0,10);
-          renderCollectionUniquePhotos(randomPicrures);
-          addPictureClickHandler(randomPicrures);
-        });
-      };
-      debounce(()=>getRandomPictures(pictures), 2000);
-
+      getRandomPictures(pictures);
       getDefaultPicters(pictures);
       getDiscussedPictures(pictures);
       getPopularPictures(pictures);

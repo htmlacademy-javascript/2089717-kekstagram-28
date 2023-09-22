@@ -1,7 +1,7 @@
 
 import { renderCollectionUniquePhotos } from './miniature.js';
 import { addThumbnailClickHandler } from './popup.js';
-// import {debounce} from './util.js';
+import {debounce, throttle} from './util.js';
 const imgFiltersSection = document.querySelector('.img-filters');
 const filterRandomButton = document.querySelector('#filter-random');
 const filterDfaultButton = document.querySelector('#filter-default');
@@ -54,44 +54,50 @@ const addPictureClickHandler = (pictures) => {
 
 
 const getDefaultPicters = (pictures) => {
-  filterDfaultButton.addEventListener('click', () => {
+
+  function onDefaultFilterClick () {
     clearPictures();
     renderCollectionUniquePhotos(pictures);
     addPictureClickHandler(pictures);
-  });
+  }
+  onDefaultFilterClick = debounce(onDefaultFilterClick, 150);
+  filterDfaultButton.addEventListener('click', onDefaultFilterClick);
 };
 
 
 const getRandomPictures = (pictures) => {
-  filterRandomButton.addEventListener('click', () => {
+
+  function onRandomFilterClick () {
     clearPictures();
     const randomPicrures = getMixedArray(pictures).slice(0,10);
     renderCollectionUniquePhotos(randomPicrures);
     addPictureClickHandler(randomPicrures);
-  });
+  }
+  onRandomFilterClick = throttle(onRandomFilterClick,500);
+  filterRandomButton.addEventListener('click', onRandomFilterClick);
 };
 
-// const getRandomPicturesWithDelay = (pictures) => {
-//   debounce(() => getRandomPictures(pictures), 2000);
-// };
-
-
 const getDiscussedPictures = (pictures) => {
-  filterDfaultDiscussed.addEventListener('click', () => {
+  function onDiscassedFilterClick () {
     clearPictures();
     const discussedPictures = pictures.slice().sort((a,b) => b.comments.length - a.comments.length);
     renderCollectionUniquePhotos(discussedPictures);
     addPictureClickHandler(discussedPictures);
-  });
+  }
+  onDiscassedFilterClick = debounce(onDiscassedFilterClick,150);
+  filterDfaultDiscussed.addEventListener('click',onDiscassedFilterClick);
 };
 
 const getPopularPictures = (pictures) => {
-  filterLiked.addEventListener('click', () => {
+
+  function onPopularFilterClick () {
     clearPictures();
     const likedPictures = pictures.slice().sort((a,b) => b.likes - a.likes);
     renderCollectionUniquePhotos(likedPictures);
     addPictureClickHandler(likedPictures);
-  });
+  }
+  onPopularFilterClick = debounce(onPopularFilterClick,150);
+  filterLiked.addEventListener('click', onPopularFilterClick);
 };
 
 

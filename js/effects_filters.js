@@ -138,10 +138,19 @@ const onEffectsChange = (evt) => {
   updateSlider();
 };
 
+const getCurrentFilterStyle = () => {
+  const currentFilterStyle = uploadImage.style.filter;
+  uploadImage.style.filter = `${chosenEffect.style}(${effectLevelValue.value}${chosenEffect.unit})`;
+  return currentFilterStyle;
+
+};
+// console.log(getCurrentFilterStyle());
+
 const onSliderUpdate = () => {
   effectLevelValue.value = effectLevelSlider.noUiSlider.get();
-  uploadImage.style.filter = `${chosenEffect.style}(${effectLevelValue.value}${chosenEffect.unit})`;
+  getCurrentFilterStyle();
 };
+
 
 noUiSlider.create(effectLevelSlider, {
   range: {

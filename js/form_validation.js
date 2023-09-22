@@ -1,7 +1,10 @@
 import {hashtagsField} from './data.js';
 import {showAndCloseWithSetTimeoutErrorPopup, sendFormData} from './fetch.js';
+import {preview} from './new-picture.js';
+import {picturesList} from './miniature.js';
 
 const uploadform = document.querySelector('.img-upload__form');
+// const pictureImg = picturesList.querySelector('.picture__img');
 
 const pristine = new Pristine(uploadform, {
   classTo: 'img-upload__field-wrapper',
@@ -57,6 +60,7 @@ pristine.addValidator(
 
 // makeFormValidate();
 
+
 const formValidation = (evt) => {
   evt.preventDefault();
   const isValid = pristine.validate();
@@ -64,6 +68,9 @@ const formValidation = (evt) => {
   if(isValid) {
     const uploadFormData = new FormData(evt.target);
     sendFormData(uploadFormData);
+    preview.style.width = `${picturesList.children[2].children[0].width}px`;
+    preview.style.height = `${picturesList.children[2].children[0].height}px`;
+    picturesList.appendChild(preview);
   } else{
     showAndCloseWithSetTimeoutErrorPopup();
   }
