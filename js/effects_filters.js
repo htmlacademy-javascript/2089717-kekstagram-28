@@ -6,8 +6,8 @@ import {pristine} from './form_validation.js';
 const scaleControlSmaller = document.querySelector('.scale__control--smaller');
 const scaleControlBigger = document.querySelector('.scale__control--bigger');
 const scaleControlValue = document.querySelector('.scale__control--value');
-const imageUploadContaner = document.querySelector('.img-upload__preview');
-const uploadImage = imageUploadContaner.querySelector('img');
+const imageUploadContainer = document.querySelector('.img-upload__preview');
+const uploadImage = imageUploadContainer.querySelector('img');
 const effectLevelSlider = document.querySelector('.effect-level__slider');
 const effectLevelValue = document.querySelector('.effect-level__value');
 const effectsContainer = document.querySelector('.effects');
@@ -72,9 +72,9 @@ const EFFECTS = [
   },
 ];
 
-const DERAULT_EFFECT = EFFECTS[0];
+const DEFAULT_EFFECT = EFFECTS[0];
 // eslint-disable-next-line
-let chosenEffect = DERAULT_EFFECT;
+let chosenEffect = DEFAULT_EFFECT;
 
 let scaleControlValueNumber = Number(scaleControlValue.value.split('').slice(0,length - 1).join(''));
 
@@ -104,13 +104,13 @@ const makeScaleControlBigger = () => {
 scaleControlSmaller.addEventListener('click', makeScaleControlSmaller);
 scaleControlBigger.addEventListener('click', makeScaleControlBigger);
 
-const isDefault = () => chosenEffect === DERAULT_EFFECT;
+const isDefault = () => chosenEffect === DEFAULT_EFFECT;
 
 const hideSlider = () => {
   sliderContainer.classList.add('hidden');
 };
 
-const showDlider = () => {
+const showSlider = () => {
   sliderContainer.classList.remove('hidden');
 };
 
@@ -127,7 +127,7 @@ function updateSlider() {
     hideSlider();
     uploadImage.style.filter = '';
   } else {
-    showDlider();
+    showSlider();
   }
 }
 effectLevelValue.value = 0;
@@ -139,36 +139,37 @@ const onEffectsChange = (evt) => {
 };
 
 const getCurrentFilterStyle = () => {
-  const currentFilterStyle = uploadImage.style.filter;
-  uploadImage.style.filter = `${chosenEffect.style}(${effectLevelValue.value}${chosenEffect.unit})`;
+  const currentFilterStyle = uploadImage.style.filter = `${chosenEffect.style}(${effectLevelValue.value}${chosenEffect.unit})`;
   return currentFilterStyle;
 
 };
-// console.log(getCurrentFilterStyle());
+
 
 const onSliderUpdate = () => {
   effectLevelValue.value = effectLevelSlider.noUiSlider.get();
-  getCurrentFilterStyle();
+  const currentFilterValue = getCurrentFilterStyle();
+  return currentFilterValue;
 };
 
+// console.log(onSliderUpdate());
 
 noUiSlider.create(effectLevelSlider, {
   range: {
-    min:DERAULT_EFFECT.min,
-    max:DERAULT_EFFECT.max,
+    min:DEFAULT_EFFECT.min,
+    max:DEFAULT_EFFECT.max,
   },
-  start:DERAULT_EFFECT.max,
-  step: DERAULT_EFFECT.step,
+  start:DEFAULT_EFFECT.max,
+  step: DEFAULT_EFFECT.step,
   connect: 'lower',
 });
 
 if(isDefault()){
   hideSlider();
 } else {
-  showDlider();
+  showSlider();
 }
 
-const makeScaleControlStandart = () => {
+const makeScaleControlPrimordial = () => {
   if(scaleControlValue.value !== '100%') {
     scaleControlValueNumber = 100;
     scaleControlValue.value = `${scaleControlValueNumber}%`;
@@ -177,7 +178,7 @@ const makeScaleControlStandart = () => {
 };
 
 const makeNoneStyle = () => {
-  chosenEffect = DERAULT_EFFECT;
+  chosenEffect = DEFAULT_EFFECT;
   uploadImage.classList.add(`effects__preview--${chosenEffect.value}`);
   effectsLabel.focus();
 };
@@ -187,7 +188,7 @@ function updateModal(){
   updateSlider();
   hashtagsField.value = '';
   descriptionField.value = '';
-  makeScaleControlStandart();
+  makeScaleControlPrimordial();
   pristine.reset();
 }
 

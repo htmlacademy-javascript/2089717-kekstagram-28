@@ -3,17 +3,13 @@ import {showAndCloseWithSetTimeoutErrorPopup, sendFormData} from './fetch.js';
 import {preview} from './new-picture.js';
 import {picturesList} from './miniature.js';
 
-const uploadform = document.querySelector('.img-upload__form');
-// const pictureImg = picturesList.querySelector('.picture__img');
+const uploadForm = document.querySelector('.img-upload__form');
 
-const pristine = new Pristine(uploadform, {
+const pristine = new Pristine(uploadForm, {
   classTo: 'img-upload__field-wrapper',
   errorTextParent: 'img-upload__field-wrapper',
 
 });
-
-// const makeFormValidate = () => {
-
 
 const VALID_SYMBOLS = new RegExp('^#[0-9а-яёa-z]{1,19}$', 'i');
 
@@ -77,4 +73,4 @@ const formValidation = (evt) => {
 };
 
 
-export{uploadform, formValidation, pristine};
+export{uploadForm, formValidation, pristine};

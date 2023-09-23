@@ -2,7 +2,7 @@ import { renderCollectionUniquePhotos } from './miniature.js';
 import {showAlert} from './util.js';
 import {imgUploadOverlay,onDocumentKeydown} from './upload_modal.js';
 import {updateModal} from './effects_filters.js';
-import {getDefaultPicters,getDiscussedPictures,addPictureClickHandler,getPopularPictures,getRandomPictures} from './filter.js';
+import {getDefaultPictures,getDiscussedPictures,addPictureClickHandler,getPopularPictures,getRandomPictures} from './filter.js';
 
 const getData = () => {
   fetch('https://28.javascript.pages.academy/kekstagram/data')
@@ -17,7 +17,7 @@ const getData = () => {
       renderCollectionUniquePhotos(pictures);
       addPictureClickHandler(pictures);
       getRandomPictures(pictures);
-      getDefaultPicters(pictures);
+      getDefaultPictures(pictures);
       getDiscussedPictures(pictures);
       getPopularPictures(pictures);
     })
